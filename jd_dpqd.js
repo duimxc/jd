@@ -3,14 +3,14 @@
 ============Quantumultx===============
 [task_local]
 #店铺签到
-15 2,14 * * * https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js, tag=店铺签到, enabled=true
+15 2,14 * * * https://raw.githubusercontent.com/LingFeng0918/LF_JD/main/jd_shop_sign.js, tag=店铺签到, enabled=true
 ===========Loon============
 [Script]
-cron "15 2,14 * * *" script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js,tag=店铺签到
+cron "15 2,14 * * *" script-path=https://raw.githubusercontent.com/LingFeng0918/LF_JD/main/jd_shop_sign.js,tag=店铺签到
 ============Surge=============
-店铺签到 = type=cron,cronexp="15 2,14 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.js
+店铺签到 = type=cron,cronexp="15 2,14 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/LingFeng0918/LF_JD/main/jd_shop_sign.js
 ===========小火箭========
-店铺签到 = type=cron,script-path=https://raw.githubusercontent.com/KingRan/JDJB/main/jd_shop_sign.jss, cronexpr="15 2,14 * * *", timeout=3600, enable=true
+店铺签到 = type=cron,script-path=https://raw.githubusercontent.com/LingFeng0918/LF_JD/main/jd_shop_sign.jss, cronexpr="15 2,14 * * *", timeout=3600, enable=true
 */
 const $ = new Env('店铺签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -19,14 +19,53 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', allMessage = '', message;
 const JD_API_HOST = 'https://api.m.jd.com/api?appid=interCenter_shopSign';
-let token  = []
- 
+
 let activityId=''
 let vender=''
 let num=0
-let shopname = ''
-
-
+let shopname=''
+const token = [
+  "798370CAFA86A9823266DBCDAC06ACE3",
+  "1904356470225680D129E609993730E9",
+  "3B0B5CF5936217F0DAF9C45049769047",
+  "45CFA214DD52A3C4C36E2F7B6EC4919B",
+  "5DB534BBC54DEC894F6B0E3503A84426",
+  "6480DA79058AECDB7B417F569E7EB65C",
+  "A8221748FD0F098B8CA2B17D2A81878F",
+  "77FCDDE2CFE2603924F342784472390A",
+  "6AA49F14CAEDBCCA8D8172A38D03494E",
+  "F12DF4C5BBD9BE39112FA6620F10A280",
+  "00DF1C433836C57E58EBF26415592982",
+  "22C81EC2EE4B7A7B475CFE264894A743",
+  "7D7881FDDBBAAFB999F6A794E2036A56",
+  "A1CC0AC18C38B6554728FDD8F703183F",
+  "E32A11E8D0F109206A55188A5DE09C4E",
+  "0BF7EAC82E5FEF41F715BB478A8EA8F2",
+  "ED0E9E159C9A7DB907DE28542D043BB9",
+  "B6D45CBE79819E9EFE01E875B034AE02",
+  "C07A1EC3EF64764AFA183BC09E2F0871",
+  "F820F2B0C74649584CF91D57DD2DE1AB",
+  "DE537A5894A293E1E3010A6AECB158AB",
+  "3D71F9D98609851BEF22760E203F8D4B",
+  "70B52CC899EE66B877F3701D8C8FD49F",
+  "0FA06CDDB52AE05A98F572BC102C051F",
+  "E38AC8DE7886EE40F3A1B5C53EDCEC44",
+  "97C1CE5FD22CC02A52DD6583B3E29F46",
+  "A9E9B398C1701CDF69EAEB9AA058D3B6",
+  "96CA1B4773730B31113441AF0CEF79CA",
+  "2140C8347C964EA604617E70B1060F88",
+  "93827A0C317FF8388F5323E343561537",
+  "6D1040B49F1C8E0BDA6D685C461AB239",
+  "4C235E50FF15E3FB23F27A63F40D928E",
+  "DFBDDD9B4E6EA8429BC3AC83545F1056",
+  "305A6FBB3436A6593F827CFBC6E189D4",
+  "8DC2E6DF1FCF4C8FD95ACEEB3476E863",
+  "6370F170657FD72A64011EA562CADA18",
+  "9DE0806161F9094B11379DE3D5E2DA32",
+  "2A06C8033DC59A514506ACA3603C90DA",
+  "5FE79A44B0B89E64C10264A893549A53",
+  "4C1FF52453BB0AF757A44FD42004796E"
+]
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -44,33 +83,6 @@ if ($.isNode()) {
 }
 
 !(async () => {
-  token = await getCodes('https://cdn.jsdelivr.net/gh/lukesyy/Jsons@main/codes/dpqd.json') 
-  console.log(token);
-  if (!token||token.length==0) {
-    token = [
-      "EC8098CDD87260EE9458913F02AA19F5",
-      "4C17B0D0B81E4874662357E7F558D2FB",
-      "A518A5F74992F82258E9E859443A7CFA",
-      "70BB75A3E199645C329556D33A6FE0B4",
-      "96CA1B4773730B31113441AF0CEF79CA",
-      "D8FBBB03E5B3F7671BDCB73728957C56",
-      "F658709F1069375C7F7EB1D2DB8A85DD",
-      "E3B62366D81FA9DC53E5E1088FD5FA46",
-      "9C6F70D339EA675C0CC0A2D7FBECCC57",
-      "247751BD7E2B94A0C91E1FA956841022",
-      "69B31DB107B9FE242E286E4E8B3E0E75",
-      "1071B720BDB54B6ED8163A6B4116F35F",
-      "448830F150804FF9EF123B2BABBD00EA",
-      "98E3218582D0CDEA2B684A3BADBE5ED4",
-      "3F1ACF8E669258AFABAE6D5084AD4138",
-      "8049AC5EE59DBBB7146F6BA61E494CC2",
-      "CDE449E3CCFC77AA637133C88399EAC5",
-      "186ACAEA426F9C07CB2E0BC790DA78FA",
-      "E5254610D0CF9752133E206292D83256",
-      "F98343185FAFB04F0776238CD1BE1E51",
-      "428D0D4607EE334A7AB74FFB2639795C"
-    ]
-  }
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
@@ -107,26 +119,7 @@ if ($.isNode()) {
     .finally(() => {
       $.done();
     })
-    function getCodes(url) {
-      return new Promise(resolve => {
-        const options = {
-          url
-        };
-        $.get(options, async (err, resp, data) => {
-          try {
-            if (err) {
-            } else {
-              console.log(data);
-              if (data) data = JSON.parse(data)
-            }
-          } catch (e) {
-            // $.logErr(e, resp)
-          } finally {
-            resolve(data);
-          }
-        })
-      })
-    }
+
 //开始店铺签到
 async function dpqd(){
   for (var j = 0; j < token.length; j++) {
